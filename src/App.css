@@ -1,3 +1,14 @@
 .card-title {
   display: flex;
 }
+
+.edit a {
+  color: #6c757d;
+}
+
+.edit:hover > a,
+.edit:focus > a,
+.edit a:hover,
+.edit a:focus {
+  color: #fff;
+}

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Consumer } from '../../context';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class Contact extends Component {
   state = {
@@ -21,12 +23,21 @@ class Contact extends Component {
   onKeyDelete = (e, id, dispatch) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      dispatch({ type: 'DELETE_CONTACT', payload: id });
+      this.deleteRequest(id, dispatch);
     }
   };
 
   onClickDelete = (id, dispatch) => {
-    dispatch({ type: 'DELETE_CONTACT', payload: id });
+    this.deleteRequest(id, dispatch);
+  };
+
+  deleteRequest = async (id, dispatch) => {
+    try {
+      await axios.delete(`http://jsonplaceholder.typicode.com/users/${id}`);
+      dispatch({ type: 'DELETE_CONTACT', payload: id });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {
@@ -56,8 +67,12 @@ class Contact extends Component {
                   />
                   {showContactInfo ? 'Hide Details' : 'Show Details'}
                 </button>
+                <button className="btn btn-outline-secondary ml-auto edit">
+                  <span className="fas fa-pencil-alt mr-2" />
+                  <Link to={`contact/edit/${id}`}>Edit Contact</Link>
+                </button>
                 <button
-                  className="btn btn-danger ml-auto"
+                  className="btn btn-danger ml-1"
                   onClick={this.onClickDelete.bind(this, id, dispatch)}
                   onKeyPress={this.onKeyDelete.bind(this, id, dispatch)}
                 >
